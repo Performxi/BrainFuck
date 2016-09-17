@@ -15,18 +15,14 @@
 // The paper sheet
 #define buffsize 30
 char sheet [buffsize]={0};
-
 int cur=0;
-
 
 //--------------stack start  ----------------
 
 struct stacknode {
-
 	int cur;
 	struct stacknode  * next;
 };
-
 
 static stacknode* TheStack ;
 int is_empty();
@@ -50,7 +46,6 @@ void push ( int cur ){
 
 	}
 }
-
 
 int pop (void ){
 
@@ -83,14 +78,15 @@ void printstack(){
 	p=TheStack;
 	printf("The Stack ");
 
-	if (p==NULL){ printf("Is empty");}
+	if (p==NULL){ printf("Is empty\n");}
 
 	while (p!= NULL){
-		printf("%d\n",p->cur);
+		printf("%d,",p->cur);
 		p=p->next;
 	}
+	printf("\n");
 }
-//-----------end the list --------------------
+//-----------end the stack --------------------
 void printbuff(){
 
 	for (int i=0;i<buffsize;i++){
@@ -121,6 +117,15 @@ int toIFE(FILE * f){
 }
 int main (int argn,char *argv[]){
 
+	/* test the stack 
+	push(12);
+	push(122);
+	printstack();
+	pop();
+	printstack();
+	*/
+	
+
 	//open file 
 	char test_file[]="test.bf";
 	FILE * inf;
@@ -133,32 +138,46 @@ int main (int argn,char *argv[]){
 	
 	char ch;
 	while ((ch=(char)fgetc(inf))!= EOF){
+		printf("------%d---%c-----\n",(int) ftell(inf),ch);
 		switch (ch){
 			case ADD: sheet[cur]+=1 ;break;
 			case SUB: sheet[cur]-=1 ;break;
 			case NXT: cur =(cur+1)%buffsize ;break;
-			case PRV: cur =(cur-1)%buffsize ;break;
+			case PRV: cur =(cur-1+buffsize)%buffsize;break;
 			case INN: scanf("%d",&sheet[cur]);break;
 			case OUT: printf("%c",sheet[cur]); break;
 			case IFS: {
 				push((int) ftell(inf));
 
 				if (sheet[cur]){
-
+					
 				}else{
-					toIFE(inf);
+					pop();
+					if(toIFE(inf)){
+						printf("[error]\n");
+					}
 				}
 
 				break;
 			}
 			case IFE:{
+				printstack();
 
-				fseek(inf,(long)pop()-1,SEEK_SET);
+				long cut_f=(long)pop()-1;
+				if(cut_f>=0){
+
+					//printf("THE IFE %d\n",cut_f);
+					fseek(inf,cut_f,SEEK_SET);
+
+				}else{
+
+
+				}
+
 				break;
 
 			}
 		}
-		printf("------%d---%c-----\n",(int) ftell(inf),ch);
 		printbuff();
 	}
 
