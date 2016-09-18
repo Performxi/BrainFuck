@@ -1,3 +1,4 @@
+//coding:utf-8
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,7 +13,7 @@
 #define IFE ']'
 //string 
 #define s_infile_error "[error]:打开文件%s失败\n"
-#define s_ife_error "[error]:在代码的%d 处没有与之对应的']'\n"
+#define s_ife_error "[error]:在代码的%d处没有与之对应的']'\n"
 // The paper sheet
 #define buffsize 30
 char sheet [buffsize]={0};
